@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <ostream>
+#include <stdexcept>
 
 class Node {
 public:
@@ -40,9 +41,14 @@ public:
 
   void printsList(){
     Node* current = head;
+    if(head== nullptr){
+      std::cout << "No node yet" << std::endl;
+      throw std::invalid_argument("Head is null, add a node with append");
+      
+    }
     // Prints the first element of the list
     while(current->next != nullptr){
-      std::cout << current->value << std::endl;
+      std::cout << current->value << ">";
       current = current->next;
     }
     std::cout << current->value << std::endl;
@@ -60,13 +66,31 @@ public:
 };
 
 int main() {
-  Node(5);
+
+
+  int number;
+  LinkedList linked;
+  try {
+    for(int i = 0; i < 5; i++){
+      std::cout  << "Enter a value for a node: " << std::endl;
+      std::cin >> number;
+      linked.append(number);
+    }
+    std::cout << "\n";
+    linked.printsList();
+  }
+  catch (const std::runtime_error& e) {
+    std::cerr << "Error: " <<  e.what() << std::endl;
+  }
 
   LinkedList newLinked;
   newLinked.append(5);
   newLinked.append(10);
   newLinked.append(20);
-  newLinked.printsList();
+//  newLinked.printsList();
+//  Test with a empty list
+//  LinkedList empty;
+//  empty.printsList();
 
   return 0;
 }
