@@ -22,6 +22,7 @@ public:
   Node* head;
   Node* tail;
   int length;
+  
   LinkedList() {
     head = nullptr;
     tail = nullptr;
@@ -62,6 +63,17 @@ public:
   }
   void deleteLast() {}
 
+  ~LinkedList(){
+    Node* current = head;
+    while(current != nullptr){
+      Node* next= current->next;
+      delete current;
+      current = next;
+    }
+//    if(tail){
+//      std::cout << "Destructor failed" << std::endl;
+//    }
+  };
 
 };
 
@@ -83,10 +95,10 @@ int main() {
     std::cerr << "Error: " <<  e.what() << std::endl;
   }
 
-  LinkedList newLinked;
-  newLinked.append(5);
-  newLinked.append(10);
-  newLinked.append(20);
+//  LinkedList newLinked;
+//  newLinked.append(5);
+//  newLinked.append(10);
+//  newLinked.append(20);
 //  newLinked.printsList();
 //  Test with a empty list
 //  LinkedList empty;
