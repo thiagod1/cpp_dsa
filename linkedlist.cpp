@@ -4,6 +4,7 @@
  */
 
 #include <iostream>
+#include <limits>
 #include <ostream>
 #include <stdexcept>
 
@@ -16,6 +17,8 @@ public:
     value = node_value;
   }
 };
+
+
 class LinkedList {
 public:
   Node *head;
@@ -27,6 +30,7 @@ public:
     tail = nullptr;
     length = 0;
   }
+  
   void append(int value) {
     Node *new_to_append = new Node(value);
     if (length == 0) {
@@ -43,7 +47,9 @@ public:
     Node *current = head;
     if (head == nullptr) {
       std::cout << "No node yet" << std::endl;
-      throw std::runtime_error("Head is null, add a node with append");
+      return;
+
+//      throw std::runtime_error("Head is null, add a node with append");
     }
     // Prints the first element of the list
     while (current->next != nullptr) {
@@ -56,14 +62,29 @@ public:
   void printsHead() {
     Node *current= head;
     if(!current){
-      std::cout << "There is no head";
+      std::cout << "No node yet" << std::endl;
+      return;
+//      throw std::runtime_error("Head is null, add a node with append");
     }
     std::cout << current->value << std::endl;
-
   }
+
+
+
+  // Work on this next, still doesn't work
+  // getting heap after user error 
+  // When I append a list 
+  // delete it 
+  // print it
+  // then get error
   void deleteLast(){ 
-    Node* last = tail;
-    delete last;
+    Node* last = head;
+    while(last->next != nullptr){
+      last->next = last->next->next;
+      if(last->next == nullptr){
+        delete last;
+      }
+    }
   }
 
   ~LinkedList() {
@@ -75,10 +96,43 @@ public:
     }
   };
 };
-
 int main() {
 
-  int number;
+  int value;
+  LinkedList emptyTest;
+  emptyTest.printsHead();
+
+  for (int i = 0; i < 5; i++){
+    std::cout << "Enter a integer: ";
+    std::cin >> value;
+    if (std::cin.fail()){
+      std::cin.clear(); // required to clean buffer beclause if there is an eror program just freezes
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+      std::cout << "Invalid Input" << std::endl;
+    }else{
+      emptyTest.append(value);
+      emptyTest.printsList();
+    }
+  }
+
+  //  try {
+  //    std::cout << "Enter a value: " << std::endl;
+  //    std::cin >> value;  
+  //  }catch (std::runtime_error &e){
+  //    std::cerr << "Error: " << e.what() << std::endl;
+  //  }
+
+
+
+//  Empty list still causes a crash
+  std::cout << "\nPRINTING HEAD TEST\n";
+  LinkedList head;
+  try{ 
+    head.printsList();
+  }catch (const std::runtime_error &e){
+    std::cerr << "Error: " << e.what() << std::endl;
+  }
+int number;
   LinkedList linked;
   try {
     for (int i = 0; i < 5; i++) {
@@ -92,14 +146,6 @@ int main() {
     std::cerr << "Error: " << e.what() << std::endl;
   }
 
-//  Empty list still causes a crash
-  std::cout << "\nPRINTING HEAD TEST\n";
-  LinkedList head;
-  try{ 
-    head.printsList();
-  }catch (const std::runtime_error &e){
-    std::cerr << "Error: " << e.what() << std::endl;
-  }
   try{
     LinkedList deleteLast;
     for (int i = 0; i < 5; i++) {
@@ -110,7 +156,7 @@ int main() {
     int loop_condition;
     int user_input;
     while(loop_condition != 1){
-      std::cout << "Press 1 to quit and press 0 to print list" <<  std::endl;
+      std::cout << "Press 1 to quit and press 0 to print list 2 to deleteLast" <<  std::endl;
       std::cin >> user_input; 
       if(user_input == 0){
         deleteLast.printsList();
@@ -122,8 +168,6 @@ int main() {
         deleteLast.deleteLast();
       }
     }
-
-
   }catch(const std::runtime_error &e){
     std::cerr << "Error: " << e.what() << std::endl;
   }
