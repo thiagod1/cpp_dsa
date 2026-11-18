@@ -48,15 +48,15 @@ public:
     if (head == nullptr) {
       std::cout << "No node yet" << std::endl;
       return;
-
-//      throw std::runtime_error("Head is null, add a node with append");
+    }
+    if(!current->next){
+      std::cout << "no next ";
     }
     // Prints the first element of the list
-    while (current->next != nullptr) {
-      std::cout << current->value << ">";
+    while (current) {
+      std::cout << current->value << " -> ";
       current = current->next;
     }
-    std::cout << current->value << std::endl;
   }
 
   void printsHead() {
@@ -64,27 +64,34 @@ public:
     if(!current){
       std::cout << "No node yet" << std::endl;
       return;
-//      throw std::runtime_error("Head is null, add a node with append");
     }
     std::cout << current->value << std::endl;
   }
 
-
-
-  // Work on this next, still doesn't work
-  // getting heap after user error 
-  // When I append a list 
-  // delete it 
-  // print it
-  // then get error
-  void deleteLast(){ 
-    Node* last = head;
-    while(last->next != nullptr){
-      last->next = last->next->next;
-      if(last->next == nullptr){
-        delete last;
-      }
+  void printLast(){
+    Node *current = head;
+    if(!current){
+      std::cout << "No node yet" << std::endl;
     }
+
+    while (current->next != nullptr){
+      current = current->next;
+    }
+    std::cout << current->value << std::endl;
+  }
+
+  void deleteLast(){ 
+    Node* current = head;
+    if (!current){
+      std::cout << "No node yet"<< std::endl;
+      return;
+    }
+    while(current->next){
+      tail = current;
+      current = current->next;
+    }
+    tail->next = nullptr;
+    delete current;
   }
 
   ~LinkedList() {
@@ -96,11 +103,21 @@ public:
     }
   };
 };
+
+
+
+
+
 int main() {
+
+
+  // test of delete last, still getting seg fault
+  // What is causing the seg fault is not delete but the printsList afterwards
 
   int value;
   LinkedList emptyTest;
   emptyTest.printsHead();
+  emptyTest.deleteLast();
 
   for (int i = 0; i < 5; i++){
     std::cout << "Enter a integer: ";
@@ -112,19 +129,27 @@ int main() {
     }else{
       emptyTest.append(value);
       emptyTest.printsList();
+      std::cout << "\n";
     }
   }
 
-  //  try {
-  //    std::cout << "Enter a value: " << std::endl;
-  //    std::cin >> value;  
-  //  }catch (std::runtime_error &e){
-  //    std::cerr << "Error: " << e.what() << std::endl;
-  //  }
+  int menu;
+  std::cout << "PRESS 0 TO QUIT and 1 to delete last 2 prints last" << std::endl;
+  std::cin >>  menu;
+  if(menu==0){
+    return 0;
+  }
+  if(menu == 1){
+    emptyTest.deleteLast();
+  }
+  if(menu == 2) {
+    emptyTest.printLast();
+  }
+  std::cout << "List after delete last" << std::endl;
+  emptyTest.printsList();
 
 
-
-//  Empty list still causes a crash
+//  Empty list still causes a crash [x] Solved
   std::cout << "\nPRINTING HEAD TEST\n";
   LinkedList head;
   try{ 
